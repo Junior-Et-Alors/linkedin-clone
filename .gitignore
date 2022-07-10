@@ -23,3 +23,6 @@ node_modules
 
 # folder data mangodb
 data
+
+# file generate by github.com/codegangsta/gin (auto reload main.go )
+gin-bin
