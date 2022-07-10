@@ -4,10 +4,11 @@ services:
     restart: always
     build: .
     ports:
-      - 8080:8080
+      - 8080:3000
     volumes:
       - .:/opt/app/
-  mongodb:
+    working_dir: /opt/app/
+  mongo:
     container_name: mongo-dev
     image: mongo:5.0
     environment:
@@ -17,15 +18,17 @@ services:
     networks: 
       - mongo-compose-network
     ports:
-      - '60017:27017'
+      - '20017:27017'
     volumes: 
       - ./data:/data/db
+      - ./data/configdb:/data/configdb
   
   mongo-express:
     container_name: mongo-express
-    image: mongo-express:0.54
+    image: mongo-express:0.54.0
+    restart: always
     depends_on:
-      - mongodb
+      - mongo
     networks: 
       - mongo-compose-network
     environment:
@@ -36,10 +39,10 @@ services:
       - ME_CONFIG_BASICAUTH_USERNAME=admin
       - ME_CONFIG_BASICAUTH_PASSWORD=pass
     ports:
-      - '6082:8081'
+      - '8081:8081'
     volumes: 
-      - ./data:/data/db      
-
+      - ./data:/data/db
+      - ./data/configdb:/data/configdb
 networks:
   mongo-compose-network:
     driver: bridge
