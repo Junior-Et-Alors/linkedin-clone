@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine
+FROM golang:1.16-alpine as build
 
 WORKDIR /opt/app
 
@@ -8,8 +8,15 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN go build -o /linkedin-clone
+RUN go build -o /opt/app .
 
-EXPOSE 8080
+FROM golang:1.16-alpine as run
 
-CMD [ "/linkedin-clone" ]
+WORKDIR /opt/app
+RUN go get github.com/codegangsta/gin
+ENV BIN_APP_PORT=8080
+COPY ./go.mod .
+COPY ./go.sum .
+RUN go mod download
+
+ENTRYPOINT [ "gin","run","main.go" ]
