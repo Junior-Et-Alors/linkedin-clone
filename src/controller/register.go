@@ -37,7 +37,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	f := contact["Firstname"]
 	l := contact["Lastname"]
 
-	if len(e) == 0 || len(p) == 0 || len(f) == 0 || len(l) == 0 {
+	if len(e) == 0 || len(p) == 0 || len(f) == 0 || len(l) == 0 || e == "" || p == "" || f == "" || l == "" {
 		msg := 403
 		var outputMessageError []int
 

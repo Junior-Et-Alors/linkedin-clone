@@ -31,7 +31,7 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	e := contact["Email"]
 	p := contact["Password"]
 
-	if len(e) == 0 || len(p) == 0 {
+	if len(e) == 0 || len(p) == 0 || e == "" || p == "" {
 		msg := 403
 		var outputMessageError []int
 		utils.SendReponseError(outputMessageError, msg, w)
@@ -46,9 +46,6 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 		utils.SendReponseError(outputMessageError, msg, w)
 		return
 	}
-
-	//password := []byte(p)
-	//hashedpassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 
 	u := entity.User{Email: e, Mdp: p}
 	clientOptions := mongo.Initializer()
