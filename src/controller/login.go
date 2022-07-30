@@ -31,7 +31,13 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	e := contact["Email"]
 	p := contact["Password"]
 
-	if len(e) == 0 || len(p) == 0 || e == "" || p == "" {
+	if e == "" || p == "" {
+		msg := 400
+		var outputMessageError []int
+		utils.SendReponseError(outputMessageError, msg, w)
+		return
+	}
+	if len(e) == 0 || len(p) == 0 {
 		msg := 403
 		var outputMessageError []int
 		utils.SendReponseError(outputMessageError, msg, w)
