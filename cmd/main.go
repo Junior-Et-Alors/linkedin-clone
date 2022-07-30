@@ -14,7 +14,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	//r.HandleFunc("/", controller.HomePage)
+	r.HandleFunc("/", controller.HomePage)
 	r.HandleFunc("/login", controller.LoginPage).Methods("POST")
 
 	r.HandleFunc("/register", controller.RegisterUser).Methods("POST")
