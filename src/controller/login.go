@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
-	"linkedin-clone/db/mongo"
 	"linkedin-clone/src/entity"
 	"linkedin-clone/src/usecase"
 	"linkedin-clone/src/utils"
@@ -54,8 +53,7 @@ func LoginPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u := entity.User{Email: e, Mdp: p}
-	clientOptions := mongo.Initializer()
-	checkLogUser := usecase.Login(clientOptions, u, p)
+	checkLogUser := usecase.Login(u, p)
 
 	if !checkLogUser {
 		msg := 403

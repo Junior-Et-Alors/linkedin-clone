@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
-	"linkedin-clone/db/mongo"
 	"linkedin-clone/src/entity"
 	"linkedin-clone/src/usecase"
 	"linkedin-clone/src/utils"
@@ -67,9 +66,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	password := []byte(p)
 	hashedpassword, _ := bcrypt.GenerateFromPassword(password, bcrypt.DefaultCost)
 	u := entity.User{Email: e, Password: hashedpassword, Firstname: f, Lastname: l}
-
-	clientOptions := mongo.Initializer()
-	check := usecase.CheckIsEmailExist(clientOptions, u)
+	check := usecase.CheckIsEmailExist(u)
 
 	if check == true {
 		msg := 403
@@ -78,7 +75,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		utils.SendReponseError(outputMessageError, msg, w)
 		return
 	}
-	go usecase.InsertUser(clientOptions, u)
+	go usecase.InsertUser(u)
 
 	var outputJsonResponse []int
 
