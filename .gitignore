@@ -26,3 +26,6 @@ data
 
 # file generate by github.com/codegangsta/gin (auto reload main.go )
 gin-bin
+
+# env file
+.env
