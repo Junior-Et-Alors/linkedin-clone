@@ -3,17 +3,17 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"linkedin-clone/db/mongodb"
 	"linkedin-clone/src/entity"
-	"linkedin-clone/src/repository"
+	"linkedin-clone/src/repository/mongoRepository"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func InsertUser(clientOptions *options.ClientOptions, user entity.User) {
-
+func InsertUser(user entity.User) {
+	clientOptions := mongodb.Initializer()
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		fmt.Println("mongo connection error :", err)
@@ -31,20 +31,21 @@ func InsertUser(clientOptions *options.ClientOptions, user entity.User) {
 		UpdateAt:  time.Now(),
 	}
 
-	repository.InsertUser(context.Background(), userEntity, col)
+	mongoRepository.InsertUser(context.Background(), userEntity, col)
 
 }
 
-func Login(clientOptions *options.ClientOptions, user entity.User, passwordFromForm string) bool {
-
-	u := repository.GetUser(clientOptions, user)
+func Login(user entity.User, passwordFromForm string) bool {
+	clientOptions := mongodb.Initializer()
+	u := mongoRepository.GetUser(clientOptions, user)
 
 	match := bcrypt.CompareHashAndPassword(u.GetPassword(), []byte(user.GetMdp()))
 	return match == nil
 }
 
-func CheckIsEmailExist(clientOptions *options.ClientOptions, user entity.User) bool {
-	u := repository.GetUser(clientOptions, user)
-	fmt.Println(u.GetEmail(), user.GetEmail())
+func CheckIsEmailExist(user entity.User) bool {
+	clientOptions := mongodb.Initializer()
+	u := mongoRepository.GetUser(clientOptions, user)
+
 	return u.GetEmail() == user.GetEmail()
 }
